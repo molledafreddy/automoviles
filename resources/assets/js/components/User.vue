@@ -75,7 +75,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(user, index) in users">
+                            <tr v-for="(user, index) in user">
                                 <td>{{user.dni}}</td>                   
                                 <td>{{user.name}}</td>
                                 <td>{{user.nacionality}}</td>
@@ -97,6 +97,7 @@
                             </tr>
                         </tbody>
                     </table>
+                   </div>                   
                     <modal v-if="showModal" @close="showModal = false" @save="save">
                         <h3 slot="header">Cargar imagen</h3>
                         <div slot="body">
@@ -109,13 +110,12 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="btn btn-default btn-primary form-control">
-                               <b>Seleccione la imagen</b> <input class="form-control btn-xs" type="file" style="display: none;" @change="loadfile">
+                               <b>Seleccione la imagen</b> <input class="form-control btn-xs" type="file" style="display: none;" @change="imageChanged">
                             </label>
                                 </div>
                             </div>                            
                         </div>    
                     </modal>
-                   </div>                   
             </div>    
         </div>
     </div>
@@ -130,7 +130,8 @@
                 currentIndex: null,
                 currentId: null,
                 user: [],
-                message: '',  
+                message: '',
+                image: '',  
             }
         },
         mounted() {
@@ -138,33 +139,12 @@
             this.getUser();
         },
         methods:{
-            /*
-            getUser(page){
-                var self = this;
-                axios.get('/api/v1/user?page=' + page)
-                    .then(response => {
-                        console.log(response);
-                        self.users = response.data.users.data;
-                        self.banks = response.data.banks;
-                        self.customers = response.data.customers;
-                    })
-                    .catch(error => {
-                        alert(error.data.message);
-                    })
-            },
-            getUser($id){
-                var self = this;
-                        console.log("hola");
-                axios.get('/user' + $id)
-                    .then(response => {
-                        self.user = response.data.user.data;
-                        alert(response.data.message);
-                                           })
-                    .catch(error => {
-                        //alert(error.data.message);
-                    })
-            },
-            */
+
+           imageChanged (e){
+            console.log(e.target);
+            var fileReader = new FileReader()
+            fileReader.readAsDataURL(e.target.files[0])
+           }, 
            getUser(page){
                 var self = this;
                 //axios.get('/user')
@@ -218,7 +198,7 @@
                 this.draft.bank_id = this.users[index].banks[0].id; 
                 this.currentIndex = index;
                 this.currentId = this.users[index].id;
-                this.showModal = true;
+                //this.showModal = true;
                 this.editing = true;
             },
 
